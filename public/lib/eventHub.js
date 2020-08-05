@@ -7,13 +7,13 @@ document.addEventListener("notify", function (e) {
 });
 
 document.addEventListener("login", function (e) {
-  if (e.detail === 200) {
-    document.getElementById('auth_anchor').href = '#/logout';  
+  if (e.detail) {
+    document.getElementById("auth_anchor").href = "#/logout";
     document.getElementById("auth_anchor").innerText = "Logout";
 
-    document.getElementById('user_anchor').parentNode.className = 'NavigationItem';
-    document.getElementById('user_anchor').innerText = 'Hello XXXX';
-    document.getElementsByClassName('Auth')[0].className = 'Auth hide';
-
+    document.getElementById("user_anchor").parentNode.className =
+      "NavigationItem";
+    document.getElementById("user_anchor").innerText = `Hello ${e.detail.split('.')[0]}`;
+    document.getElementsByClassName("Auth")[0].className = "Auth hide";
   }
 });

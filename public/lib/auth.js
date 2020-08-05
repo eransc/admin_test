@@ -1,6 +1,5 @@
 const AUTH_REGISTRATION = 1;
 const AUTH_LOGIN = 2;
-const service_url = "http://localhost:3000/api/users";
 
 class Auth {
   constructor(auth_method) {
@@ -13,7 +12,7 @@ class Auth {
     const http = new XMLHttpRequest();
 
     const params = `email=${email}&password=${password}&first_name=${first_name}&last_name=${last_name}`;
-    http.open("POST", `${service_url}/register` , true);
+    http.open("POST", `${config.service_url}/register` , true);
 
     //Send the proper header information along with the request
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -32,7 +31,7 @@ class Auth {
     const http = new XMLHttpRequest();
     const params = `email=${email}&password=${password}&first_name=${first_name}&last_name=${last_name}`;
   
-    http.open("POST", `${service_url}/authenticate` , true);
+    http.open("POST", `${config.service_url}/authenticate` , true);
     //Send the proper header information along with the request
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
@@ -43,7 +42,7 @@ class Auth {
         localStorage.setItem('token', token);
         const event = new CustomEvent("notify", { detail: 'user authenticated' });
         document.dispatchEvent(event);
-        document.dispatchEvent(new CustomEvent("login", { detail: 200 }));
+        document.dispatchEvent(new CustomEvent("login", { detail: email }));
       }
     };
     http.send(params);

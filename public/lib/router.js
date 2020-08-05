@@ -13,15 +13,17 @@ for (var i = 0; i < anchorSelection.length; i++) {
         case "dashboard":
           document.getElementsByClassName("dashboard")[0].className =
             "dashboard";
-            document.getElementsByClassName("Auth")[0].className = "Auth hide";
-            Dashboard.prototype.init();
+          document.getElementsByClassName("Auth")[0].className = "Auth hide";
+          Dashboard.prototype.init();
           break;
         case "authenticate":
+          //clearInterval(check_online_users);
           document.getElementsByClassName("Auth")[0].className = "Auth show";
           document.getElementsByClassName("dashboard")[0].className =
             "dashboard hide";
           break;
         case "logout":
+          //clearInterval(check_online_users);
           localStorage.removeItem("token");
           e.target.href = "#/authenticate";
           e.target.innerText = "Authenticate";
