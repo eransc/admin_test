@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sample application</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div>
+      <header class="Toolbar">
+        <nav style="width: 100%;">
+          <ul class="NavigationItems right">
+            <li class="NavigationItem">
+              <a class="anchor_click" id="auth_anchor" href="#/authenticate"
+                >Authenticate</a
+              >
+            </li>
+            <li class="NavigationItem">
+              <a class="anchor_click" id="dashboard" href="#/dashboard"
+                >Dashboard</a
+              >
+            </li>
+          </ul>
+          <ul>
+            <li class="NavigationItem hide">
+              <a id="user_anchor"> </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main class="Content">
+        <div class="dashboard">
+          <div>Users</div>
+          <ul>
+            <li>
+              <a href="#"> ggf</a>
+            </li>
+            <li>
+              <a href="#"> ggf</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="Auth hide">
+          <form onsubmit="handleClick()">
+            <p id="form_label" class="Label">Registration</p>
+            <div class="Input">
+              <label class="Label"></label>
+              <input
+                id="first_name"
+                type="text"
+                class="InputElement"
+                placeholder="First Name"
+              />
+            </div>
+            <div class="Input">
+              <label class="Label"></label>
+              <input
+                id="last_name"
+                type="text"
+                class="InputElement"
+                placeholder="Last Name"
+              />
+            </div>
+            <div class="Input">
+              <label class="Label"></label>
+              <input
+                id="email"
+                type="email"
+                class="InputElement"
+                placeholder="Email address"
+                required
+              />
+            </div>
+            <div class="Input">
+              <label class="Label"></label>
+              <input
+                id="password"
+                type="password"
+                class="InputElement"
+                placeholder="Password"
+                minlength="5"
+                required
+              />
+            </div>
+            <button type="submit" class="Button Success">
+              Submit
+            </button>
+          </form>
+          <button id="auth_switcher" class="Button Danger">
+            Switch to Sign In
+          </button>
+          <p id="message" class="Message" style="display: none;"></p>
+        </div>
+      </main>
+    </div>
+  </body>
+
+  <script src="./lib/dashboard.js"></script>
+  <script src="./lib/auth.js"></script>
+  <script src="./lib/router.js"></script>
+  <script src="./lib/eventHub.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+      const auth = new Auth(AUTH_REGISTRATION);
+      console.log(auth.auth_method);
+
+      renderState = () => {
+        const switch_content =
+          auth.auth_method === AUTH_REGISTRATION
+            ? "Switch To Login"
+            : "Switch To Registration";
+        document.getElementById("auth_switcher").innerText = switch_content;
+
+        // show / hide inputs
+        const visibility =
+          auth.auth_method === AUTH_REGISTRATION ? "show" : "hide";
+        document.getElementById(
+          "first_name"
+        ).parentNode.className = `Input ${visibility}`;
+        document.getElementById(
+          "last_name"
+        ).parentNode.className = `Input ${visibility}`;
+      };
+
+      initAuthForm = () => {
+        renderState();
+        document
+          .getElementById("auth_switcher")
+          .addEventListener("click", () => {
+            auth.auth_method =
+              auth.auth_method === AUTH_REGISTRATION
+                ? AUTH_LOGIN
+                : AUTH_REGISTRATION;
+            renderState();
+
+            document.getElementById("form_label").innerText =
+              auth.auth_method === AUTH_REGISTRATION ? "Registration" : "Login";
+          });
+      };
+
+      initAuthForm();
+
+      handleClick = () => {
+        if (auth.auth_method == AUTH_REGISTRATION) {
+          auth.register(
+            document.getElementById("email").value,
+            document.getElementById("password").value,
+            document.getElementById("first_name").value,
+            document.getElementById("last_name").value
+          );
+        } else if (auth.auth_method == AUTH_LOGIN) {
+          auth.login(
+            document.getElementById("email").value,
+            document.getElementById("password").value
+          );
+        }
+
+        document.getElementById("form_label").innerText =
+          auth.auth_method === AUTH_REGISTRATION ? "Registration" : "Login";
+        return false;
+      };
+    });
+  </script>
+</html>
